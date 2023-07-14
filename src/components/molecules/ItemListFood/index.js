@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Rating from '../Rating';
 import Number from '../Number';
+import { IcMin, IcPlus } from '../../../assets';
 
 const ItemListFood = ({
     image,
@@ -13,6 +14,8 @@ const ItemListFood = ({
     type,
     date,
     status,
+    value,
+    isCount
 }) => {
 
     const renderContent = () => {
@@ -84,10 +87,21 @@ const ItemListFood = ({
     }
 
     return (
-        <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+        <TouchableOpacity activeOpacity={0.7} onPress={!isCount ? onPress : null}>
             <View style={styles.container}>
                 <Image source={image} style={styles.image} />
                 {renderContent()}
+                {isCount &&
+                <>
+                    <TouchableOpacity onPress={() => onPress('minus')}>
+                        <IcMin />
+                    </TouchableOpacity>
+                    <Text style={styles.value}>{value}</Text>
+                    <TouchableOpacity onPress={() => onPress('plus')}>
+                        <IcPlus />
+                    </TouchableOpacity>
+                </>
+                }
             </View>
         </TouchableOpacity>
     );
@@ -134,5 +148,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 10,
         color: '#D9435E',
-    }
+    },
+    value: {
+        fontSize: 16,
+        fontFamily: 'Poppins-Regular',
+        color: '#020202',
+        marginHorizontal: 10,
+    },
 });
