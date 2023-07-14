@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FoodDetail, Home, Order, OrderDetail, OrderSummary, Profile, SignIn, SignUp, SignUpAddress, SplashScreen, SuccessOrder, SuccessSignUp } from "../pages";
+import { FoodDetail, Home, Order, OrderDetail, OrderSummary, Profile, SignIn, SignUp, SignUpAddress, SplashScreen, SuccessOrder, SuccessSignUp, PaymentMethod } from "../pages";
 import { BottomNavigator } from "../components";
 
 
@@ -69,6 +69,11 @@ const Router = () => {
             < Stack.Screen
                 name="OrderDetail"
                 component={OrderDetail}
+                options={{ headerShown: false }}
+            />
+            < Stack.Screen
+                name="PaymentMethod"
+                component={PaymentMethod}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
