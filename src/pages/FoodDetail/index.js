@@ -3,9 +3,11 @@ import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { FoodDummy6, IcBackWhite } from '../../assets';
 import { Button, Counter, Number, Rating } from '../../components/';
 import { getData } from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FoodDetail = ({ navigation, route }) => {
     const {
+        id,
         name,
         picturePath,
         description,
@@ -15,6 +17,8 @@ const FoodDetail = ({ navigation, route }) => {
     } = route.params;
     const [totalItem, setTotalItem] = useState(1);
     const [userProfile, setUserProfile] = useState({});
+
+    const storage = AsyncStorage
 
     useEffect(() => {
         getData('userProfile').then(res => {
@@ -27,13 +31,55 @@ const FoodDetail = ({ navigation, route }) => {
         setTotalItem(value);
     };
 
+    const addToChart = async () => {
+        const data = await storage.getItem("item_in_cart")
+
+        let item_in_cart = {
+            id_product: id,
+            product_name: name,
+            product_picture: picturePath,
+            product_description: description,
+            product_ingredients: ingredients,
+            rating: rate,
+            price: parseFloat(price),
+            qty: totalItem
+        }
+
+        // storage.removeItem("item_in_cart")
+
+        if (data == null) {
+            await storage.setItem("item_in_cart", JSON.stringify([item_in_cart]))
+        }
+        else {
+            let item = JSON.parse(data)
+
+            let item_duplicated = item.filter((x, i) => i == item.findIndex(
+                e => x.id_product == e.id_product
+            ))
+
+            const check_data_cart = item_duplicated.filter(x => x.id_product == item_in_cart.id_product)
+
+            if (check_data_cart.length > 0) {
+                const check_data_index = item_duplicated.indexOf(check_data_cart[0])
+
+                if (check_data_index !== -1) {
+                    item_duplicated[check_data_index] = item_in_cart
+                    storage.setItem("item_in_cart",  JSON.stringify([...item_duplicated]))
+                }
+            }
+            else {
+                await storage.setItem("item_in_cart",  JSON.stringify([...item_duplicated, item_in_cart]))
+            }
+        }
+
+        navigation.navigate("Order")
+    }
+
     const onOrder = () => {
         const totalPrice = totalItem * price;
         const pickUp = 0;
         const tax = 10 / 100 * totalPrice;
         const total = totalPrice + pickUp + tax;
-
-
 
         const data = {
             item: {
@@ -85,8 +131,8 @@ const FoodDetail = ({ navigation, route }) => {
                     </View>
                     <View style={styles.button}>
                         <Button
-                            text="Pesan Sekarang"
-                            onPress={onOrder}
+                            text="Masukkan Keranjang"
+                            onPress={addToChart}
                         />
                     </View>
                 </View>
