@@ -1,9 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4, FoodDummy5 } from '../../../assets';
 import ItemListFood from '../ItemListFood';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { Button } from '../../atoms';
+import { getData } from '../../../utils';
 
 const renderTabBar = props => (
   <TabBar
@@ -28,6 +33,130 @@ const renderTabBar = props => (
   />
 );
 
+
+const InCart = () => {
+  const navigation = useNavigation();
+  const focused = useIsFocused()
+
+  const storage = AsyncStorage
+
+  const [dataCart, setDataCart] = useState([])
+  const [userProfile, setUserProfile] = useState({});
+
+  const getDataCart =  async () => {
+    const data = await storage.getItem("item_in_cart")
+    
+    let item = JSON.parse(data)
+
+    setDataCart(item)
+
+    getData('userProfile').then(res => {
+        setUserProfile(res);
+    });
+  }
+
+  useEffect(() => {
+    getDataCart()
+  }, [focused])
+
+  const totalItem = dataCart?.reduce((acc, obj) => {return acc+obj.qty},0)
+  const add_subtotal = dataCart?.map(x => {return {...x, subtotal: parseFloat(x.price * x.qty)}})
+  const totalPrice = add_subtotal?.reduce((acc, obj) => {return acc+obj.subtotal},0)
+
+  return (
+    <View style={{ paddingTop: 8, paddingHorizontal: 24 }}>
+      <FlatList
+       data={dataCart}
+       renderItem={(({item, index}) => {
+          return (
+            <ItemListFood
+              isCount
+              rating={3}
+              image={{uri: item?.product_picture}}
+              name={item.product_name}
+              type="in-progress"
+              items={item.qty}
+              value={item.qty}
+              price={parseFloat(item.price * item.qty)}
+              onPress={(val) => {
+                if (val == "plus") {
+                  const add_item = dataCart.map(x => {
+                    if (x.id_product == item.id_product) {
+                      x.qty += 1
+                    }
+                    return x
+                  })
+
+                  setDataCart(add_item)
+                }
+                else {
+                  const add_item = dataCart.map(x => {
+                    if (item.qty < 2) {
+                      Alert.alert("Perhatian", "Produk tidak boleh kosong", [
+                        {
+                          text: "tidak",
+                          style: 'cancel',
+                        },
+                        {
+                          text: "Ya",
+                          onPress: () => {
+                            const find_data_index = dataCart.indexOf(item) 
+
+                            if (index !== -1) {
+                              dataCart.splice(find_data_index, 1)
+                            }
+
+                            setDataCart(dataCart);
+                          }
+                        }
+                      ])
+                      return x
+                    }
+                    else {
+                      if (x.id_product == item.id_product) {
+                        x.qty -= 1
+                      }
+                      return x
+                    }
+                  })
+
+                  setDataCart(add_item)
+                }
+              }}
+            />
+          )
+       })}
+      />
+      {totalPrice > 0 &&
+      <View style={{width: '80%', marginTop: 25, alignSelf: 'center'}}>
+          <Button
+              text="Pesan Sekarang"
+              onPress={() => {
+
+                  let pickUp = 0
+                  let tax = 10 / 100 * totalPrice
+
+                  const data = {
+                      item: add_subtotal,
+                      transaction: {
+                          totalItem: totalItem,
+                          totalPrice: totalPrice,
+                          pickUp: pickUp,
+                          tax: tax,
+                          total: totalPrice + pickUp + tax
+                      },
+                      userProfile
+                  };
+          
+                  console.log('data for checkout: ', data);
+                  navigation.navigate('OrderSummary', data);
+              }}
+          />
+      </View>
+      }
+    </View>
+  );
+};
 
 const InProgress = () => {
   const navigation = useNavigation();
@@ -104,8 +233,9 @@ const PastOrders = () => {
 };
 
 const renderScene = SceneMap({
-  1: InProgress,
-  2: PastOrders,
+  1: InCart,
+  2: InProgress,
+  3: PastOrders,
 });
 
 const OrderTabSection = () => {
@@ -113,8 +243,9 @@ const OrderTabSection = () => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: '1', title: 'Sedang dibuat' },
-    { key: '2', title: 'Pesanan selesai' },
+    { key: '1', title: 'Keranjang' },
+    { key: '2', title: 'Sedang dibuat' },
+    { key: '3', title: 'Pesanan selesai' },
   ]);
 
   return (
@@ -132,4 +263,5 @@ const OrderTabSection = () => {
 
 export default OrderTabSection;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+});
