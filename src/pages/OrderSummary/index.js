@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FoodDummy4 } from '../../assets';
 import { Button, Header, ItemListFood, ItemValue } from '../../components';
@@ -6,6 +6,9 @@ import { Button, Header, ItemListFood, ItemValue } from '../../components';
 
 const OrderSummary = ({ navigation, route }) => {
     const { item, transaction, userProfile } = route.params;
+
+    let data = item
+
     return (
         <View>
             <Header
@@ -15,12 +18,20 @@ const OrderSummary = ({ navigation, route }) => {
             />
             <View style={styles.content}>
                 <Text style={styles.label}>Pesanan</Text>
-                <ItemListFood
-                    type="order-summary"
-                    name={item.name}
-                    price={item.price}
-                    items={transaction.totalItem}
-                    image={{ uri: item.picturePath }}
+                <FlatList
+                    data={data}
+                    renderItem={(({item}) => {
+                        return (
+                            <ItemListFood
+                                type="order-summary"
+                                name={item.product_name}
+                                price={item.subtotal}
+                                items={item.qty}
+                                image={{ uri: item.product_picture }}
+                            />
+                        )
+                    })}
+                    
                 />
 
                 <Text style={styles.label}>Detail Transaksi</Text>
@@ -42,7 +53,7 @@ const OrderSummary = ({ navigation, route }) => {
                 <ItemValue label="Kota" value={userProfile.city} />
             </View>
             <View style={styles.button}>
-                <Button text="Bayar Sekarang" onPress={() => navigation.replace('SuccessOrder')} />
+                <Button text="Bayar Sekarang" onPress={() => navigation.navigate('PaymentMethod', {total_payment: transaction.total})} />
             </View>
         </View>
     );
