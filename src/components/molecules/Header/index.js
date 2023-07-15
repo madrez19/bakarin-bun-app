@@ -16,7 +16,7 @@ const Header = ({ title, subTitle, onBack }) => {
             <View>
                 <Text style={styles.title}>{title}</Text>
                 {subTitle &&
-                <Text style={styles.subTitle}>{subTitle}</Text>
+                    <Text style={styles.subTitle}>{subTitle}</Text>
                 }
             </View>
         </View >

@@ -26,7 +26,7 @@ const Home = ({ navigation }) => {
                                     key={itemFood.id}
                                     name={itemFood.name}
                                     rating={itemFood.rate}
-                                    image={FoodDummy3}
+                                    image={{ uri: itemFood.picturePath }}
                                     onPress={() => navigation.navigate('FoodDetail', itemFood)}
                                 />
                             );
@@ -45,6 +45,6 @@ export default Home;
 
 const styles = StyleSheet.create({
     page: { flex: 1 },
-    foodCardContainer: { flexDirection: 'row', marginVertical: 12 },
+    foodCardContainer: { flexDirection: 'row', marginVertical: 24 },
     tabContainer: { flex: 1 },
 });

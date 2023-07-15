@@ -92,15 +92,15 @@ const ItemListFood = ({
                 <Image source={image} style={styles.image} />
                 {renderContent()}
                 {isCount &&
-                <>
-                    <TouchableOpacity onPress={() => onPress('minus')}>
-                        <IcMin />
-                    </TouchableOpacity>
-                    <Text style={styles.value}>{value}</Text>
-                    <TouchableOpacity onPress={() => onPress('plus')}>
-                        <IcPlus />
-                    </TouchableOpacity>
-                </>
+                    <>
+                        <TouchableOpacity onPress={() => onPress('minus')}>
+                            <IcMin />
+                        </TouchableOpacity>
+                        <Text style={styles.value}>{value}</Text>
+                        <TouchableOpacity onPress={() => onPress('plus')}>
+                            <IcPlus />
+                        </TouchableOpacity>
+                    </>
                 }
             </View>
         </TouchableOpacity>

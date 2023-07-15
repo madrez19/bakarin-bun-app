@@ -7,7 +7,7 @@ const FoodCard = ({ image, name, rating, onPress }) => {
     return (
         <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
             <View style={styles.container}>
-                <Image source={image} />
+                <Image source={image} style={styles.image} />
                 <View style={styles.content}>
                     <Text style={styles.text}>{name}</Text>
                     <Rating number={rating} />
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         marginRight: 24
     },
+    image: { width: 200, height: 170, resizeMode: 'cover' },
     content: { padding: 12 },
     text: {
         fontSize: 16,
