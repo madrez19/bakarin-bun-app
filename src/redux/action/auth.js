@@ -17,20 +17,21 @@ export const signUpAction = (dataRegister, photoReducer, navigation) => (
                 const photoForUpload = new FormData();
                 photoForUpload.append('file', photoReducer);
 
-                Axios.post(
-                    `${API_HOST.url}/user/photo`,
-                    photoForUpload,
-                    {
-                        headers: {
-                            Authorization: token,
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    }).then(resUpload => {
-                        profile.profile_photo_url = `https://backend.bakarinbun.com/storage/${resUpload.data.data[0]}`
+                Axios.post(`${API_HOST.url}/user/photo`, photoForUpload, {
+                    headers: {
+                        Authorization: token,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                })
+                    .then((resUpload) => {
+                        profile.profile_photo_url = `${API_HOST.storage}/${resUpload.data.data[0]}`;
                         storeData('userProfile', profile);
                         navigation.reset({ index: 0, routes: [{ name: 'SuccessSignUp' }] });
-                    }).catch((err) => {
-                        showMessage('Upload foto tidak berhasil');
+                    })
+                    .catch((err) => {
+                        showMessage(
+                            err?.response?.message || 'Uplaod photo tidak berhasil',
+                        );
                         navigation.reset({ index: 0, routes: [{ name: 'SuccessSignUp' }] });
                     });
             } else {
@@ -46,9 +47,9 @@ export const signUpAction = (dataRegister, photoReducer, navigation) => (
 };
 
 export const signInAction = (form, navigation) => (dispatch) => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     Axios.post(`${API_HOST.url}/login`, form)
-        .then(res => {
+        .then((res) => {
             const token = `${res.data.data.token_type} ${res.data.data.access_token}`;
             const profile = res.data.data.user;
             dispatch(setLoading(false));
@@ -56,8 +57,8 @@ export const signInAction = (form, navigation) => (dispatch) => {
             storeData('userProfile', profile);
             navigation.reset({ index: 0, routes: [{ name: 'MainApp' }] });
         })
-        .catch(err => {
+        .catch((err) => {
             dispatch(setLoading(false));
-            showMessage(err?.response?.data?.message);
+            showMessage(err?.response?.data?.data?.message);
         });
-}
+};

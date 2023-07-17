@@ -10,13 +10,12 @@ const SignUpAddress = ({ navigation }) => {
         phoneNumber: '',
         address: '',
         houseNumber: '',
-        city: 'Bogor'
+        city: 'Bogor',
     });
     const dispatch = useDispatch();
     const { registerReducer, photoReducer } = useSelector((state) => state);
 
     const onSubmit = () => {
-        console.log('form: ', form);
         const data = {
             ...form,
             ...registerReducer,

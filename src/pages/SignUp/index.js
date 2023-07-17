@@ -23,14 +23,15 @@ const SignUp = ({ navigation }) => {
         navigation.navigate('SignUpAddress')
     };
     const addPhoto = () => {
-        const option = {
+        let options = {
 
+            mediaType: 'photo',
             quality: 0.5,
             maxWidth: 200,
             maxHeight: 200
-        }
+        };
 
-        launchImageLibrary(option, (response) => {
+        launchImageLibrary(options, response => {
             console.log('Response = ', response);
 
             if (response.didCancel || response.errorCode) {
@@ -46,7 +47,7 @@ const SignUp = ({ navigation }) => {
                 setPhoto(source);
                 dispatch({ type: 'SET_PHOTO', value: dataImage });
                 dispatch({ type: 'SET_UPLOAD_STATUS', value: true });
-            };
+            }
         },
         );
     };

@@ -14,6 +14,7 @@ const ItemListFood = ({
     type,
     date,
     status,
+    status2,
     value,
     isCount
 }) => {
@@ -68,6 +69,7 @@ const ItemListFood = ({
                         <View>
                             <Text style={styles.date}>{date}</Text>
                             <Text style={styles.status}>{status}</Text>
+                            <Text style={styles.status2}>{status2}</Text>
                         </View>
                     </>
                 );
@@ -148,6 +150,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 10,
         color: '#D9435E',
+    },
+    status2: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 10,
+        color: '#5CB85C',
     },
     value: {
         fontSize: 16,

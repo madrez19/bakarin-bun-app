@@ -57,7 +57,7 @@ const OrderSummary = ({ navigation, route }) => {
                     <ItemValue label="Kota" value={userProfile.city} />
                 </View>
                 <View style={styles.button}>
-                    <Button text="Bayar Sekarang" onPress={() => navigation.navigate('PaymentMethod', { total_payment: transaction.total })} />
+                    <Button text="Lanjutkan" onPress={() => navigation.navigate('PaymentMethod', { total_payment: transaction.total })} />
                 </View>
             </ScrollView>
         </View>

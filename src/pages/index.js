@@ -11,6 +11,7 @@ import OrderSummary from "./OrderSummary";
 import SuccessOrder from "./SuccessOrder";
 import OrderDetail from "./OrderDetail";
 import PaymentMethod from "./PaymentsMethod";
+import EditProfile from "./EditProfile";
 
 export {
     SplashScreen,
@@ -25,5 +26,6 @@ export {
     OrderSummary,
     SuccessOrder,
     OrderDetail,
-    PaymentMethod
+    PaymentMethod,
+    EditProfile,
 };

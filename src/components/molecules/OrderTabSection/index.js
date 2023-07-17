@@ -43,15 +43,15 @@ const InCart = () => {
   const [dataCart, setDataCart] = useState([])
   const [userProfile, setUserProfile] = useState({});
 
-  const getDataCart =  async () => {
+  const getDataCart = async () => {
     const data = await storage.getItem("item_in_cart")
-    
+
     let item = JSON.parse(data)
 
     setDataCart(item)
 
     getData('userProfile').then(res => {
-        setUserProfile(res);
+      setUserProfile(res);
     });
   }
 
@@ -59,20 +59,20 @@ const InCart = () => {
     getDataCart()
   }, [focused])
 
-  const totalItem = dataCart?.reduce((acc, obj) => {return acc+obj.qty},0)
-  const add_subtotal = dataCart?.map(x => {return {...x, subtotal: parseFloat(x.price * x.qty)}})
-  const totalPrice = add_subtotal?.reduce((acc, obj) => {return acc+obj.subtotal},0)
+  const totalItem = dataCart?.reduce((acc, obj) => { return acc + obj.qty }, 0)
+  const add_subtotal = dataCart?.map(x => { return { ...x, subtotal: parseFloat(x.price * x.qty) } })
+  const totalPrice = add_subtotal?.reduce((acc, obj) => { return acc + obj.subtotal }, 0)
 
   return (
     <View style={{ paddingTop: 8, paddingHorizontal: 24 }}>
       <FlatList
-       data={dataCart}
-       renderItem={(({item, index}) => {
+        data={dataCart}
+        renderItem={(({ item, index }) => {
           return (
             <ItemListFood
               isCount
               rating={3}
-              image={{uri: item?.product_picture}}
+              image={{ uri: item?.product_picture }}
               name={item.product_name}
               type="in-progress"
               items={item.qty}
@@ -100,7 +100,7 @@ const InCart = () => {
                         {
                           text: "Ya",
                           onPress: () => {
-                            const find_data_index = dataCart.indexOf(item) 
+                            const find_data_index = dataCart.indexOf(item)
 
                             if (index !== -1) {
                               dataCart.splice(find_data_index, 1)
@@ -125,34 +125,34 @@ const InCart = () => {
               }}
             />
           )
-       })}
+        })}
       />
       {totalPrice > 0 &&
-      <View style={{width: '80%', marginTop: 25, alignSelf: 'center'}}>
+        <View style={{ width: '80%', marginTop: 25, alignSelf: 'center' }}>
           <Button
-              text="Pesan Sekarang"
-              onPress={() => {
+            text="Pesan Sekarang"
+            onPress={() => {
 
-                  let pickUp = 0
-                  let tax = 10 / 100 * totalPrice
+              let pickUp = 0
+              let tax = 10 / 100 * totalPrice
 
-                  const data = {
-                      item: add_subtotal,
-                      transaction: {
-                          totalItem: totalItem,
-                          totalPrice: totalPrice,
-                          pickUp: pickUp,
-                          tax: tax,
-                          total: totalPrice + pickUp + tax
-                      },
-                      userProfile
-                  };
-          
-                  console.log('data for checkout: ', data);
-                  navigation.navigate('OrderSummary', data);
-              }}
+              const data = {
+                item: add_subtotal,
+                transaction: {
+                  totalItem: totalItem,
+                  totalPrice: totalPrice,
+                  pickUp: pickUp,
+                  tax: tax,
+                  total: totalPrice + pickUp + tax
+                },
+                userProfile
+              };
+
+              console.log('data for checkout: ', data);
+              navigation.navigate('OrderSummary', data);
+            }}
           />
-      </View>
+        </View>
       }
     </View>
   );
@@ -166,7 +166,7 @@ const InProgress = () => {
         rating={3}
         image={FoodDummy4}
         onPress={() => navigation.navigate('OrderDetail')}
-        label="Choco Crunchy Bun"
+        name="Choco Crunchy Bun"
         type="in-progress"
         items={3}
         price="45.000"
@@ -175,7 +175,7 @@ const InProgress = () => {
         rating={3}
         image={FoodDummy3}
         onPress={() => navigation.navigate('OrderDetail')}
-        label="Choco Taro Bun"
+        name="Choco Taro Bun"
         type="in-progress"
         items={3}
         price="45.000"
@@ -184,7 +184,7 @@ const InProgress = () => {
         rating={3}
         image={FoodDummy5}
         onPress={() => navigation.navigate('OrderDetail')}
-        label="Mobeef Bun"
+        name="Mobeef Bun"
         type="in-progress"
         items={3}
         price="45.000"
@@ -205,7 +205,9 @@ const PastOrders = () => {
         type="past-orders"
         items={3}
         price="45.000"
-        date="Nov 25, 16:30"
+        date="July 10, 16:30"
+        status2="Success"
+
       />
       <ItemListFood
         rating={3}
@@ -215,7 +217,7 @@ const PastOrders = () => {
         type="past-orders"
         items={3}
         price="45.000"
-        date="Nov 25, 16:30"
+        date="July 10, 16:30"
         status="Cancel"
       />
       <ItemListFood
@@ -226,7 +228,9 @@ const PastOrders = () => {
         type="past-orders"
         items={3}
         price="45.000"
-        date="Nov 25, 16:30"
+        date="July 10, 16:30"
+        status2="Success"
+
       />
     </View>
   );

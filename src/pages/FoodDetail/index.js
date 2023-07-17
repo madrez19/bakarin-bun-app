@@ -64,11 +64,11 @@ const FoodDetail = ({ navigation, route }) => {
 
                 if (check_data_index !== -1) {
                     item_duplicated[check_data_index] = item_in_cart
-                    storage.setItem("item_in_cart",  JSON.stringify([...item_duplicated]))
+                    storage.setItem("item_in_cart", JSON.stringify([...item_duplicated]))
                 }
             }
             else {
-                await storage.setItem("item_in_cart",  JSON.stringify([...item_duplicated, item_in_cart]))
+                await storage.setItem("item_in_cart", JSON.stringify([...item_duplicated, item_in_cart]))
             }
         }
 
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     priceContainer: { flex: 1 },
-    button: { width: 163 },
+    button: { width: 200 },
     labelTotal: {
         fontSize: 13,
         fontFamily: 'Poppins-Regular',

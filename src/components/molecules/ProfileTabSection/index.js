@@ -8,22 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const renderTabBar = props => (
   <TabBar
     {...props}
-    indicatorStyle={{ backgroundColor: '#306934', height: 3 }}
-    style={{
-      backgroundColor: 'white',
-      elevation: 0,
-      shadowOpacity: 0,
-      borderBottomColor: '#F2F2F2',
-      borderBottomWidth: 1
-    }}
-    tabStyle={{ width: 'auto' }}
-    renderLabel={({ route, focused, color }) => (
-      <Text style={{
-        fontFamily: 'Poppins-Medium',
-        color: focused ? '#306934' : '#8D92A3',
-      }}>
-        {route.title}
-      </Text>
+    indicatorStyle={styles.indicator}
+    style={styles.tabBarStyle}
+    tabStyle={styles.tabStyle}
+    renderLabel={({ route, focused }) => (
+      <Text style={styles.tabText(focused)}>{route.title}</Text>
     )}
   />
 );
@@ -37,8 +26,11 @@ const Account = () => {
     });
   }
   return (
-    <View style={{ paddingTop: 8, paddingHorizontal: 24 }}>
-      <ItemListMenu text="Edit Profile" />
+    <View style={styles.containerAccount}>
+      <ItemListMenu
+        text="Edit Profile"
+        onPress={() => navigation.navigate('EditProfile')}
+      />
       <ItemListMenu text="Home Address" />
       <ItemListMenu text="Security" />
       <ItemListMenu text="Payments" />
@@ -50,7 +42,7 @@ const Account = () => {
 const BakarinBun = () => {
   const navigation = useNavigation();
   return (
-    <View style={{ paddingTop: 8, paddingHorizontal: 24 }}>
+    <View style={styles.containerBakarinBun}>
       <ItemListMenu text="Rate App" />
       <ItemListMenu text="Help Center" />
       <ItemListMenu text="Privacy & Policy" />
@@ -80,7 +72,7 @@ const ProfileTabSection = () => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
-      style={{ backgroundColor: 'white' }}
+      style={styles.tabView}
     />
 
   );
@@ -88,4 +80,26 @@ const ProfileTabSection = () => {
 
 export default ProfileTabSection;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  tabView: { backgroundColor: 'white' },
+  indicator: {
+    backgroundColor: '#306934',
+    height: 3,
+    width: '15%',
+    marginLeft: '3%',
+  },
+  tabBarStyle: {
+    backgroundColor: 'white',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomColor: '#F2F2F2',
+    borderBottomWidth: 1
+  },
+  tabStyle: { width: 'auto' },
+  tabText: (focused) => ({
+    fontFamily: 'Poppins-Medium',
+    color: focused ? '#306934' : '#8D92A3',
+  }),
+  containerAccount: { paddingTop: 8, paddingHorizontal: 24 },
+  containerBakarinBun: { paddingTop: 8, paddingHorizontal: 24 },
+});

@@ -8,10 +8,10 @@ const SuccessOrder = ({ navigation }) => {
         <View style={styles.page}>
             <IlSuccessOrder />
             <Gap height={25} />
-            <Text style={styles.title}>PESANAN-MU SEDANG KAMI BUATKAN</Text>
+            <Text style={styles.title}>Pesanan Sedang Dibuat!</Text>
             <Gap height={6} />
             <Text style={styles.subTitle}>Tunggu aku ya, pesanan-mu akan</Text>
-            <Text style={styles.subTitle}>aku buatkan, jangan lupa pesan yang lain ya.</Text>
+            <Text style={styles.subTitle}>aku buatkan, jangan lupa pesan yang lain!.</Text>
             <Gap height={30} />
             <View style={styles.buttonContainer}>
                 <Button
